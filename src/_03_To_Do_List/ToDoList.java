@@ -2,6 +2,9 @@ package _03_To_Do_List;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -92,24 +95,41 @@ public class ToDoList implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
 				String task = "";
 				for (int i = 0; i < tasks.size(); i++) {
-					task = task.concat(tasks.get(i) + "\n");
+					task = task+tasks.get(i) + "\n";
 				}
 				FileWriter f;
 				try {
-					f = new FileWriter("src/_02_File_Encrypt_Decrypt/print.txt");
+					System.out.println(task);
+					f = new FileWriter("src/_03_To_Do_List/save.txt");
 					f.write(task);
+					f.close();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+
 			}
 		});
 		load.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String s = JOptionPane.showInputDialog("What task would you like to add?");
-				tasks.add(s);
+				try {
+					BufferedReader br = new BufferedReader(new FileReader("src/_03_To_Do_List/save.txt"));
+
+					String line = br.readLine();
+					while (line != null) {
+						tasks.add(line);
+						line = br.readLine();
+					}
+
+					br.close();
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException ee3) {
+					// TODO Auto-generated catch block
+					ee3.printStackTrace();
+				}
 			}
 		});
 		tasks = new ArrayList<String>();
